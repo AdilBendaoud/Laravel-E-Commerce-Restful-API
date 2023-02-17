@@ -2,8 +2,11 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
@@ -37,5 +40,30 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $exception)
+    {
+        if ($request->expectsJson()) {
+            if ($exception instanceof ModelNotFoundException) {
+                return response()->json([
+                    'error' => 'Resource not found'
+                ], Response::HTTP_NOT_FOUND);
+            } elseif ($exception instanceof AuthorizationException) {
+                return response()->json([
+                    'error' => 'Unauthorized'
+                ], Response::HTTP_FORBIDDEN);
+            } elseif ($exception instanceof ValidationException) {
+                return response()->json([
+                    'error' => $exception->getMessage()
+                ], Response::HTTP_BAD_REQUEST);
+            } elseif ($exception instanceof NotFoundHttpException) {
+                return response()->json([
+                    'error' => "route not found"
+                ], Response::HTTP_NOT_FOUND);
+            }
+        }
+        return parent::render($request, $exception);
+
     }
 }

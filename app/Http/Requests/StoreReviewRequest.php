@@ -13,7 +13,7 @@ class StoreReviewRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class StoreReviewRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'review' => 'required',
+            'star' => 'required|min:0|max:5'
         ];
     }
 }

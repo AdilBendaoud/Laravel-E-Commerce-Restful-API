@@ -14,7 +14,7 @@ class ProductResource extends JsonResource
             'description' => $this->discreption,
             'price' => $this->price,
             'stock' => $this->stock == 0 ? 'Out of stock' : $this->stock,
-            'rating' => $this->reviews->count() > 0 || $this->reviews->sum('star') == 0 ? $this->reviews->sum('star') / $this->reviews->count() : 'No Rating',
+            'rating' => $this->reviews->count() > 0 ? $this->reviews->sum('star') / $this->reviews->count() : 'No Rating',
             'reviews' => route('reviews.index', $this->id)
         ];
     }

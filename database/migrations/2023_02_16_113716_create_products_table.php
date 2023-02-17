@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->integer('price');
             $table->integer('stock');
             $table->integer('rating')->nullable();
+            $table->integer('user_id')->unsigned()->index();
             $table->timestamps();
         });
     }

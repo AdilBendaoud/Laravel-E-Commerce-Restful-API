@@ -1,9 +1,10 @@
 <?php
 
 namespace Database\Factories;
+use App\Models\User;
+use App\Models\Product;
 use Faker\Factory as Faker;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Product;
 
 class ProductFactory extends Factory
 {
@@ -14,7 +15,8 @@ class ProductFactory extends Factory
             'name'=>$this->faker->word(),
             'discreption'=>$this->faker->paragraph(),
             'price'=>$this->faker->numberBetween(50,1000),
-            'stock'=> $this->faker->randomDigit()
+            'stock'=> $this->faker->randomDigit(),
+            'user_id'=>function(){return User::all()->random();}
         ];
     }
 }
